@@ -46,7 +46,9 @@
         </section>
     </div>
     <div class="row justify-content-center bg-dark vh-100 bg-gradient">
-        asdasd
+        <div class="d-flex justify-content-center mt-2">    
+            <div class="h2 text-white">Obserwowane miasta:</div>
+        </div>
     </div>
 </div>
 @endsection
