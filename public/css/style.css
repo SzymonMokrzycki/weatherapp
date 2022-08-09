@@ -3,3 +3,10 @@
     background-size: cover; 
     background-position: center;
 }
+
+#login:hover{
+    background-color:black;
+}
+#register:hover{
+    background-color:black;
+}

@@ -21,18 +21,19 @@
 <body>
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-dark shadow-sm">
-            <div class="container">
-                <a class="navbar-brand text-white" href="{{ url('/') }}">
-                    {{ config('app.name', '') }}
+            <div class="container bg-secondary bg-gradient rounded-pill">
+                <a class="navbar-brand text-white" style="text-shadow: 2px 1px black;" href="{{ url('/') }}">
+                    {{ config('app.name', 'Weather app') }}
                 </a>
                 <div class="input-group">
                     <div class="form-outline">
                         <input type="search" id="form1" class="form-control" />
                     </div>
-                    <button type="button" class="btn btn-primary">
+                    <a id="a" onclick="c()"><button type="button" class="btn btn-primary">
                         <i class="fa fa-search"></i>
-                    </button>
+                    </button></a>
                 </div>
+
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -49,16 +50,21 @@
                         @guest
                             @if (Route::has('login'))
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                    <a class="nav-link text-white" id="login" href="{{ route('login') }}">{{ __('Login') }}</a>
                                 </li>
                             @endif
 
                             @if (Route::has('register'))
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                    <a class="nav-link text-white" id="register" href="{{ route('register') }}">{{ __('Register') }}</a>
                                 </li>
                             @endif
                         @else
+                        <div class="nav-item">
+                            <button type="button" class="btn btn-primary">
+                                <i class="fa fa-plus-circle" aria-hidden="true"></i> Add city
+                            </button>
+                        </div>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }}
@@ -86,5 +92,13 @@
             @yield('content')
         </main>
     </div>
+    <script>
+        function c(){
+            var a = document.getElementById('a');
+            var s = document.getElementById('form1').value;
+
+            a.setAttribute('href', '/city/'+s);
+        }
+    </script>
 </body>
 </html>
