@@ -12,26 +12,25 @@
                     <div class="card-body p-4">
 
                         <div class="d-flex">
-                        <h6 class="flex-grow-1">Warsaw</h6>
+                        <h6 class="flex-grow-1" id="cityname"></h6>
                         </div>
 
                         <div class="d-flex flex-column text-center mt-5 mb-4">
-                        <h6 class="display-4 mb-0 font-weight-bold" style="color: #1C2331;"> 13°C </h6>
-                        <span class="small" style="color: #868B94">Stormy</span>
+                        <h6 class="display-4 mb-0 font-weight-bold" style="color: #1C2331;" id="temp"> </h6>
+                        <span class="small" style="color: #868B94" id="weather"></span>
                         </div>
 
                         <div class="d-flex align-items-center">
                         <div class="flex-grow-1" style="font-size: 1rem;">
-                            <div><i class="fas fa-wind fa-fw" style="color: #868B94;"></i> <span class="ms-1"> 40 km/h
+                            <div><i class="fas fa-wind fa-fw" style="color: #868B94;"></i> <span class="ms-1" id="wind"> 
                             </span></div>
-                            <div><i class="fa fa-tint" aria-hidden="true"></i> <span class="ms-1"> 84% </span>
+                            <div><i class="fa fa-tint" aria-hidden="true"></i> <span class="ms-1" id="humidity">  </span>
                             </div>
                             <div><i class="fas fa-sun fa-fw" style="color: #868B94;"></i> <span class="ms-1"> 0.2h </span>
                             </div>
                         </div>
                         <div>
-                            <img src="{{asset('images/stormy.png')}}"
-                            width="100px">
+                            <div id="icon"></div>
                         </div>
                         </div>
 
@@ -46,7 +45,7 @@
     </div>
     <div class="row justify-content-center bg-dark border-top vh-100 bg-gradient">
         <div class="d-flex justify-content-center mt-2">    
-            <div class="h2 text-white">Followig cities:</div>
+            <div class="h2 text-white">Following cities:</div>
         </div>
     </div>
 </div>

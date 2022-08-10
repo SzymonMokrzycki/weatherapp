@@ -17,8 +17,9 @@
     <link rel="stylesheet" href="{{asset('css/style.css')}}">
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
-<body>
+<body onload="click()">
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-dark shadow-sm">
             <div class="container bg-secondary bg-gradient rounded-pill">
@@ -27,13 +28,18 @@
                 </a>
                 <div class="input-group">
                     <div class="form-outline">
-                        <input type="search" id="form1" class="form-control" />
+                        <input type="search" id="form1" class="form-control" value="Warsaw" />
                     </div>
-                    <a id="a" onclick="c()"><button type="button" class="btn btn-primary">
+                    <a id="a" onclick="click()"><button type="button" class="btn btn-dark">
                         <i class="fa fa-search"></i>
                     </button></a>
                 </div>
-
+                <select id="place" class="btn btn-dark">
+                    <option value="All places">All places</option>
+                    <option value="Poland">Poland</option>
+                    <option value="England">England</option>
+                    <option value="London">London</option>
+                </select>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -61,7 +67,7 @@
                             @endif
                         @else
                         <div class="nav-item">
-                            <button type="button" class="btn btn-primary">
+                            <button type="button" style="width:100px; margin-top:1px;" class="btn btn-dark">
                                 <i class="fa fa-plus-circle" aria-hidden="true"></i> Add city
                             </button>
                         </div>
@@ -93,11 +99,31 @@
         </main>
     </div>
     <script>
-        function c(){
-            var a = document.getElementById('a');
-            var s = document.getElementById('form1').value;
-
-            a.setAttribute('href', '/city/'+s);
+        function click(){
+            let a = document.getElementById('a');
+            let city = document.getElementById('form1').value;
+            let weather = "", temp = "", humidity = "", wind = "";
+            $.ajax({
+                url: "http://localhost:8000/city/"+city,
+                method: "GET",
+                success: function (data){
+                   weather = data.weather; 
+                   temp = data.temperature;
+                   humidity = data.humidity;
+                   wind = data.wind;
+                   document.getElementById('weather').innerHTML = weather;
+                   document.getElementById('cityname').innerHTML = city;
+                   document.getElementById('temp').innerHTML = temp+"°C";
+                   document.getElementById('humidity').innerHTML = humidity+"%";
+                   document.getElementById('wind').innerHTML = wind+" m/s";
+                   let lower = weather.toLowerCase();
+                   let path = "images/"+lower+".png";
+                   //let img = '<img src="{{asset('/images/')}}" width="100">';
+                   let img = "<img src='{{asset('"+path+"')}}' width='100'>";
+                   console.log(path);
+                   $('#icon').html(img);
+                }
+            });
         }
     </script>
 </body>
