@@ -24,9 +24,7 @@
                         <div class="flex-grow-1" style="font-size: 1rem;">
                             <div><i class="fas fa-wind fa-fw" style="color: #868B94;"></i> <span class="ms-1" id="wind"> 
                             </span></div>
-                            <div><i class="fa fa-tint" aria-hidden="true"></i> <span class="ms-1" id="humidity">  </span>
-                            </div>
-                            <div><i class="fas fa-sun fa-fw" style="color: #868B94;"></i> <span class="ms-1"> 0.2h </span>
+                            <div><i class="fas fa-tint fa-fw" aria-hidden="true"></i> <span class="ms-1" id="humidity">  </span>
                             </div>
                         </div>
                         <div>
