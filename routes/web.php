@@ -22,3 +22,4 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('/city/{name}/{country}', [App\Http\Controllers\WeatherController::class, 'index']);
+Route::get('/city/{name}', [App\Http\Controllers\WeatherController::class, 'index1']);

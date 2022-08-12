@@ -37,7 +37,18 @@ class WeatherController extends Controller
         $arr = [];
         $contr = $obj->sys->country;
         $arr = array("weather" => $main, "temperature" => $t, "humidity" => $hum, "wind" => $wind, "country" => $contr, "description" => $weather);
-        $a = array("arr" => $arr, "con" => $con);
-        return $a;
+        return $arr;
+    }
+
+    public function index1($name){
+        $json = File::get("data/city.list.json");
+        $cities = json_decode($json);
+        $con = array();
+        foreach ($cities as $c => $value) {
+            if($value->name == $name){
+                array_push($con, $value->country);
+            }
+        }
+        return $con;
     }
 }

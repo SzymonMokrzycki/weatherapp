@@ -3,12 +3,12 @@
 @section('content')
 <div>
     <div class="row justify-content-center">
-        <section id="bg" style="background-image:url('images/storm.jpg');">
+        <section id="bg">
             <div class="container py-5 h-100">
                 <div class="row d-flex justify-content-center align-items-center h-100">
                 <div class="col-md-8 col-lg-6 col-xl-4">
 
-                    <div class="card shadow-lg" style="color: #4B515D; border-radius: 35px;">
+                    <div class="card shadow-lg" style="color: #4B515D; border-radius: 35px;" id="weatherback">
                     <div class="card-body p-4">
 
                         <div class="d-flex">
@@ -28,7 +28,7 @@
                             </div>
                         </div>
                         <div>
-                            <div id="icon"></div>
+                            <img id="icon" width="100">
                         </div>
                         </div>
 

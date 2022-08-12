@@ -22,7 +22,7 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.0/dist/jquery.slim.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
-<body onload="click()">
+<body onload="fun()">
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-dark shadow-sm">
             <div class="container bg-secondary bg-gradient rounded-pill">
@@ -32,11 +32,10 @@
                 @auth
                 <div class="input-group">
                     <div class="form-outline">
-                        <!--<input type="search" id="form1" class="form-control" value="Warsaw" />-->
-                        <select oninput="options()" class="form-control" id="place" multiple="multiple">
-                        </select>
+                        <input onclick="options()" type="search" id="form1" class="form-control" value="Warsaw" />
                     </div>
-                    <button type="button" class="btn btn-dark" id="a" onclick="click()">
+                    <select class="btn btn-dark" id="place"></select>
+                    <button type="button" class="btn btn-dark" onclick="fun()">
                         <i class="fa fa-search"></i>
                     </button>
                 </div>
@@ -101,63 +100,74 @@
     </div>
     <script>
         function options(){
-            let input = document.getElementById('place').value;
-            let array = input.split(", ");
+            let city = document.getElementById('form1').value;
+            /*let array = input.split(",");
             let city = array[0];
             let country = array[1];
+            console.log(v);*/
+            let option = "";
+            if(city != ""){
+                $.ajax({
+                    url: "http://localhost:8000/city/"+city,
+                    method: "GET",
+                    async: false,
+                    success: function (data){
+                        $('#place').empty();
+                        for(var i = 0; i<data.length; i++){
+                            option += '<option value="'+data[i]+'">'+data[i]+'</option>';
+                        }
+                        $('#place').append(option);
+                    }
+                });
+            }
+            if(city == ""){
+                $('#place').empty();
+            }
+        }
+
+        function fun(){
+            //console.log("cos");
+            let city = document.getElementById('form1').value;
+            let country = document.getElementById('place').value;
+            let weather = "", temp = "", humidity = "", wind = "", array = [];
+            if(country == ""){
+                country = "PL";
+            }
             $.ajax({
                 url: "http://localhost:8000/city/"+city+"/"+country,
                 method: "GET",
                 success: function (data){
-                   array = data.con;
-                   let option = [];
-                   array.forEach(function(contr){
-                        option += "<option value='"+contr+"'>"+contr+"</option>";
-                   });
-                }
-            });
-            $('#place').append(option);
-        }
-
-        function click(){
-            let a = document.getElementById('a');
-            let city = document.getElementById('place').value;
-            let weather = "", temp = "", humidity = "", wind = "", country = "", array = [];
-            $.ajax({
-                url: "http://localhost:8000/city/"+city,
-                method: "GET",
-                success: function (data){
-                   weather = data.arr.weather; 
-                   temp = data.arr.temperature;
-                   humidity = data.arr.humidity;
-                   wind = data.arr.wind;
-                   country = data.arr.country;
-                   description = data.arr.description;
-                   //console.log(array);
-                   $('#place').append(option);
+                   weather = data.weather; 
+                   temp = data.temperature;
+                   humidity = data.humidity;
+                   wind = data.wind;
+                   country = data.country;
+                   description = data.description;
                    document.getElementById('weather').innerHTML = description;
                    document.getElementById('cityname').innerHTML = city+", "+country;
                    document.getElementById('temp').innerHTML = temp+"°C";
                    document.getElementById('humidity').innerHTML = humidity+"%";
                    document.getElementById('wind').innerHTML = wind+" m/s";
                    let lower = weather.toLowerCase();
-                   let path = "images/"+lower+".png";
-                   //let img = '<img src="{{asset('/images/')}}" width="100">';
-                   let img = "<img src='{{asset('"+path+"')}}' width='100'>";
+                   document.getElementById('icon').src = "images/"+lower+".png";
+                   $(function(){
+                    $('#bg').css("background-image", "url('images/"+lower+".jpg')").hide().fadeIn(2000);
+                    //$("#bg").fadeIn(2000);
+                   });
                    console.log(lower);
-                   $('#icon').html(img);
                 }
             });
         }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.full.min.js"></script>
-    <script>
+    <!--<script>
         $(document).ready(function() {
-        $('#place').select2({
-            theme: 'bootstrap-5',
-            //dropdownParent: $('#form1')
+            $('#place').select2({
+                theme: 'bootstrap-5',
+                minimumInputLength: 2
+                //dropdownParent: $('#form1')
+            });
         });
-        });
-    </script>
+    </script>-->
 </body>
 </html>
