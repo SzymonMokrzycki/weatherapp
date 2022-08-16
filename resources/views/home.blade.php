@@ -8,7 +8,7 @@
                 <div class="row d-flex justify-content-center align-items-center h-100">
                 <div class="col-md-8 col-lg-6 col-xl-4">
 
-                    <div class="card shadow-lg" style="color: #4B515D; border-radius: 35px;" id="weatherback">
+                    <div class="card shadow-lg" style="color: #4B515D; border-radius: 35px;" id="card">
                     <div class="card-body p-4">
 
                         <div class="d-flex">
@@ -41,10 +41,50 @@
             </div>
         </section>
     </div>
-    <div class="row justify-content-center bg-dark border-top vh-100 bg-gradient">
-        <div class="d-flex justify-content-center mt-2">    
-            <div class="h2 text-white">Following cities:</div>
+    <div class="justify-content-center bg-dark border-top vh-100 bg-gradient">
+        <div class="row mt-2">    
+            <div class="h2 text-white d-flex justify-content-center mb-5">Following cities:</div>
+            <div>
+                <table class="table text-white border-top">
+                    <tbody id="tab">
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
+</div>
+<div class="modal fade" tabindex="-1" id="exampleModal" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content bg-dark text-white">
+      <div class="modal-header">
+        <h5 class="modal-title">Warsaw, PL</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"></span>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" tabindex="-1" id="exampleModal1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content bg-dark text-white">
+      <div class="modal-header">
+        <h5 class="modal-title">Add city to favourite</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"></span>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
 </div>
 @endsection

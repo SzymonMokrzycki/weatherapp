@@ -23,3 +23,4 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::get('/city/{name}/{country}', [App\Http\Controllers\WeatherController::class, 'index']);
 Route::get('/city/{name}', [App\Http\Controllers\WeatherController::class, 'index1']);
+Route::get('/allcities', [App\Http\Controllers\CityController::class, 'dispCities']);

@@ -22,7 +22,7 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.0/dist/jquery.slim.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
-<body onload="fun()">
+<body onload="fun(), allCities()">
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-dark shadow-sm">
             <div class="container bg-secondary bg-gradient rounded-pill">
@@ -67,7 +67,7 @@
                             @endif
                         @else
                         <div class="nav-item">
-                            <button type="button" style="width:100px; margin-top:1px;" class="btn btn-dark">
+                            <button type="button" style="width:100px; margin-top:1px;" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal1">
                                 <i class="fa fa-plus-circle" aria-hidden="true"></i> Add city
                             </button>
                         </div>
@@ -152,22 +152,73 @@
                    document.getElementById('icon').src = "images/"+lower+".png";
                    $(function(){
                     $('#bg').css("background-image", "url('images/"+lower+".jpg')").hide().fadeIn(2000);
-                    //$("#bg").fadeIn(2000);
                    });
-                   console.log(lower);
+                }
+            });
+        }
+
+        let selected = 0;
+
+        function selectRow(id){
+            let array = [];
+
+            //array = document.getElementsByTagName("<tr>");
+            if(selected == 0){
+                selected = 1;
+                $("#"+id).addClass("bg-secondary");
+                $("#"+id).addClass("opacity-100");
+            }else if(selected == 1){
+                selected = 0;
+                $("#"+id).removeClass("bg-secondary");
+                $("#"+id).removeClass("opacity-100");
+            }
+            //console.log(selected);
+        }
+
+        function displayWeather(name, country){
+            let weather = "", temp = "", humidity = "", wind = "", array = [];
+            $.ajax({
+                url: "http://localhost:8000/city/"+name+"/"+country,
+                method: "GET",
+                success: function (data){
+                   weather = data.weather; 
+                   temp = data.temperature;
+                   humidity = data.humidity;
+                   wind = data.wind;
+                   country = data.country;
+                   description = data.description;
+                   document.getElementById('weather').innerHTML = description;
+                   document.getElementById('cityname').innerHTML = name+", "+country;
+                   document.getElementById('temp').innerHTML = temp+"°C";
+                   document.getElementById('humidity').innerHTML = humidity+"%";
+                   document.getElementById('wind').innerHTML = wind+" m/s";
+                   let lower = weather.toLowerCase();
+                   document.getElementById('icon').src = "images/"+lower+".png";
+                   $(function(){
+                    $('#bg').css("background-image", "url('images/"+lower+".jpg')").hide().fadeIn(2000);
+                   });
+                }
+            });
+        }
+
+        let arr = "", i = 0;
+        function allCities(){
+            $.ajax({
+                url: "http://localhost:8000/allcities",
+                method: "GET",
+                success: function (data){
+                    $.each(data, function(i, array) {
+                       arr += "<tr class='bg-gradient opacity-75' id='"+i+"' onclick='selectRow("+i+"), displayWeather(\""+ array.name + "\",\""+ array.country + "\")'>"+
+                       "<td><i class='fas fa-city fa-lg'></i></td>"+
+                       "<td>"+array.name+"</td>"+
+                       "<td>"+array.country+"</td>"+
+                       "<td>30°C</td><td><button type='button' class='btn btn-dark' data-bs-toggle='modal' data-bs-target='#exampleModal' title='Display humidity chart'><i class='fas fa-chart-line fa-xl'></i></button></td><td><button type='button' class='btn btn-dark' title='Delete'><i class='fas fa-trash fa-xl'></i></button></td>";
+                    });
+                    $('#tab').append(arr);
                 }
             });
         }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.full.min.js"></script>
-    <!--<script>
-        $(document).ready(function() {
-            $('#place').select2({
-                theme: 'bootstrap-5',
-                minimumInputLength: 2
-                //dropdownParent: $('#form1')
-            });
-        });
-    </script>-->
 </body>
 </html>
