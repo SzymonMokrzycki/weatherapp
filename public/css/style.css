@@ -11,3 +11,10 @@
 #register:hover{
     background-color:black;
 }
+
+#tab1{
+    display: block;
+    height: 400px;
+    overflow: auto;
+    width:100%;
+}

@@ -14,7 +14,12 @@ class City extends Model
         'state',
         'country',
         'lon',
-        'lat'
+        'lat',
+        'user_id'
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

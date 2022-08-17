@@ -16,7 +16,7 @@
                         </div>
 
                         <div class="d-flex flex-column text-center mt-5 mb-4">
-                        <h6 class="display-4 mb-0 font-weight-bold" style="color: #1C2331;" id="temp"> </h6>
+                        <h6 class="display-4 mb-0 font-weight-bold" style="color: #1C2331;" id="temp" value=""> </h6>
                         <span class="small" style="color: #868B94" id="weather"></span>
                         </div>
 
@@ -74,15 +74,21 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content bg-dark text-white">
       <div class="modal-header">
-        <h5 class="modal-title">Add city to favourite</h5>
+        <h5 class="modal-title">Choose city to add:</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
           <span aria-hidden="true"></span>
         </button>
       </div>
-      <div class="modal-body">
-        
+      <div class="modal-body" id="tab1">
+        <table class="table text-white border-top" id="table1">
+          <tbody id="listcity">
+          </tbody>
+        </table>
       </div>
       <div class="modal-footer">
+        <button type="button" style="width:100px; margin-top:1px;" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal1">
+            <i class="fa fa-plus-circle" aria-hidden="true"></i> Add
+        </button>
       </div>
     </div>
   </div>

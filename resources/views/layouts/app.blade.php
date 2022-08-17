@@ -22,7 +22,7 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.0/dist/jquery.slim.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
-<body onload="fun(), allCities()">
+<body onload="fun(), allCities(), listCities()">
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-dark shadow-sm">
             <div class="container bg-secondary bg-gradient rounded-pill">
@@ -137,7 +137,7 @@
                 url: "http://localhost:8000/city/"+city+"/"+country,
                 method: "GET",
                 success: function (data){
-                   weather = data.weather; 
+                   weather = data.weather;
                    temp = data.temperature;
                    humidity = data.humidity;
                    wind = data.wind;
@@ -157,21 +157,13 @@
             });
         }
 
-        let selected = 0;
-
         function selectRow(id){
-            let array = [];
+            $("#"+id).addClass('opacity-100 bg-secondary selected').siblings().removeClass('opacity-100 bg-secondary selected');
+            //console.log(selected);
+        }
 
-            //array = document.getElementsByTagName("<tr>");
-            if(selected == 0){
-                selected = 1;
-                $("#"+id).addClass("bg-secondary");
-                $("#"+id).addClass("opacity-100");
-            }else if(selected == 1){
-                selected = 0;
-                $("#"+id).removeClass("bg-secondary");
-                $("#"+id).removeClass("opacity-100");
-            }
+        function selectRow1(id, name, country){
+            $("#"+id).addClass('opacity-100 bg-secondary selected').siblings().removeClass('opacity-100 bg-secondary selected');
             //console.log(selected);
         }
 
@@ -201,7 +193,18 @@
             });
         }
 
-        let arr = "", i = 0;
+        function deleteRow(id, name, country){
+            $.ajax({
+                url: "http://localhost:8000/deletecity/"+name+"/"+country,
+                method: "GET",
+                success: function (){
+                    $('#'+id).remove();
+                }
+            });
+            
+        }
+
+        let arr = "", arr1 = "", i = 0;
         function allCities(){
             $.ajax({
                 url: "http://localhost:8000/allcities",
@@ -212,9 +215,25 @@
                        "<td><i class='fas fa-city fa-lg'></i></td>"+
                        "<td>"+array.name+"</td>"+
                        "<td>"+array.country+"</td>"+
-                       "<td>30°C</td><td><button type='button' class='btn btn-dark' data-bs-toggle='modal' data-bs-target='#exampleModal' title='Display humidity chart'><i class='fas fa-chart-line fa-xl'></i></button></td><td><button type='button' class='btn btn-dark' title='Delete'><i class='fas fa-trash fa-xl'></i></button></td>";
+                       "<td></td><td><button type='button' class='btn btn-dark' data-bs-toggle='modal' data-bs-target='#exampleModal' title='Display humidity chart'><i class='fas fa-chart-line fa-xl'></i></button></td><td><button type='button' class='btn btn-dark' title='Delete' onclick='deleteRow("+i+", \""+ array.name + "\",\""+ array.country + "\")'><i class='fas fa-trash fa-xl'></i></button></td>";
                     });
                     $('#tab').append(arr);
+                }
+            });
+        }
+
+        function listCities(){
+            $.ajax({
+                url: "http://localhost:8000/list",
+                method: "GET",
+                success: function (data){
+                    for(var i = 0; i<=100; i++){
+                       arr1 += "<tr class='bg-gradient opacity-75' id='"+i+"' onclick='selectRow1("+i+", \""+ data[i].name + "\",\""+ data[i].country + "\")'>"+
+                       "<td><i class='fas fa-city fa-lg'></i></td>"+
+                       "<td>"+data[i].name+"</td>"+
+                       "<td>"+data[i].country+"</td></tr>";
+                    }
+                    $('#listcity').append(arr1);
                 }
             });
         }

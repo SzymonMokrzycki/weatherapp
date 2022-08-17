@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string("country");
             $table->double("lon");
             $table->double("lot");
+           // $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -31,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('city');
+        Schema::dropIfExists('cities');
     }
 };
