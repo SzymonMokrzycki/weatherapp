@@ -43,7 +43,7 @@
     </div>
     <div class="justify-content-center bg-dark border-top vh-100 bg-gradient">
         <div class="row mt-2">    
-            <div class="h2 text-white d-flex justify-content-center mb-5">Following cities:</div>
+            <div class="h2 text-white d-flex justify-content-center mb-5">Followed cities:</div>
             <div>
                 <table class="table text-white border-top">
                     <tbody id="tab">
@@ -53,17 +53,17 @@
         </div>
     </div>
 </div>
-<div class="modal fade" tabindex="-1" id="exampleModal" role="dialog">
+<div class="modal fade" onload="createChart()" tabindex="-1" id="exampleModal" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content bg-dark text-white">
       <div class="modal-header">
-        <h5 class="modal-title">Warsaw, PL</h5>
+        <h5 class="modal-title" id="titlechart"></h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
           <span aria-hidden="true"></span>
         </button>
       </div>
       <div class="modal-body">
-        
+        <canvas id="myChart" width="500" height="500"></canvas>
       </div>
       <div class="modal-footer">
       </div>
@@ -80,13 +80,16 @@
         </button>
       </div>
       <div class="modal-body" id="tab1">
+        <div class="form-outline mb-3">
+            <input onkeyup="searchFunction()" placeholder="Search for names.." type="search" id="filter" class="form-control" />
+        </div>
         <table class="table text-white border-top" id="table1">
           <tbody id="listcity">
           </tbody>
         </table>
       </div>
       <div class="modal-footer">
-        <button type="button" style="width:100px; margin-top:1px;" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal1">
+        <button id="addcity" type="button" style="width:100px; margin-top:1px;" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal1">
             <i class="fa fa-plus-circle" aria-hidden="true"></i> Add
         </button>
       </div>
