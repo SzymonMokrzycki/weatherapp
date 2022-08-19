@@ -70,7 +70,23 @@ function selectRow1(id, name, country){
 }
 
 function selectRow2(name, country){
-    $("#titlechart").html(""+name+", "+country);
+    const date = new Date();
+
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+
+    let currentDate = `${day}.${month}.${year}`;
+    if(month < 10){
+        currentDate = `${day}.0${month}.${year}`;
+    }
+    if(day < 10){
+        currentDate = `0${day}.${month}.${year}`;
+    }
+    if(day < 10 && month < 10){
+        currentDate = `0${day}.0${month}.${year}`;
+    }
+    $("#titlechart").html(""+name+", "+country+" - "+currentDate);
 }
 
 function displayWeather(name, country){
@@ -121,7 +137,7 @@ function allCities(){
                "<td><i class='fas fa-city fa-lg'></i></td>"+
                "<td>"+array.name+"</td>"+
                "<td>"+array.country+"</td>"+
-               "<td></td><td><button type='button' class='btn btn-dark' data-bs-toggle='modal' data-bs-target='#exampleModal' onclick='selectRow2(\""+ array.name + "\",\""+ array.country + "\")' title='Display humidity chart'><i class='fas fa-chart-line fa-xl'></i></button></td><td><button type='button' class='btn btn-dark' title='Delete' onclick='deleteRow("+i+", \""+ array.name + "\",\""+ array.country + "\")'><i class='fas fa-trash fa-xl'></i></button></td>";
+               "<td></td><td><button type='button' class='btn btn-dark' data-bs-toggle='modal' data-bs-target='#exampleModal' onclick='selectRow2(\""+ array.name + "\",\""+ array.country + "\"), setC(\""+ array.name + "\",\""+ array.country + "\"), createChart()' title='Display humidity chart'><i class='fas fa-chart-line fa-xl'></i></button></td><td><button type='button' class='btn btn-dark' title='Delete' onclick='deleteRow("+i+", \""+ array.name + "\",\""+ array.country + "\")'><i class='fas fa-trash fa-xl'></i></button></td>";
             });
             $('#tab').append(arr);
         }
@@ -177,45 +193,100 @@ function searchFunction() {
     }
 }
 
-function createChart(){
-    const ctx = document.getElementById('myChart').getContext('2d');
-    const myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-            datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
-}
 
 function set(){
     let country = document.getElementById('contry').value;
     listCities(country);
 }
+
+let temps = [], humidities = [], hours = [], nam = "", cont = "";
+
+function setC(name, country){
+    nam = name;
+    cont = country;
+}
+
+let ctx = document.getElementById('myChart').getContext('2d');
+    
+let myChart = null;
+
+function setChart(){
+    //console.log(1);
+    ctx.clearRect(0,0, ctx.width, ctx.height);
+    if(myChart != null){
+        myChart.destroy();
+    }
+    const today = new Date();
+    let min = today.getMinutes();
+    let minutes = "";
+    if(min < 10){
+        minutes = "0"+min;
+    }else{
+        minutes = ""+min;
+    }
+    let time = today.getHours() + ":" + minutes;
+    if(nam != "" && cont != ""){
+        $.ajax({
+            url: "http://localhost:8000/dataforchart/"+nam+"/"+cont,
+            method: "GET",
+            success: function (data){
+                let t = data.temp-273.15;
+                temps.push(t.toFixed(2));
+                humidities.push(data.humidity);
+                hours.push(time);
+            }
+        });
+    }  
+
+    if(temps != [] && humidities != []){
+        myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: hours,
+                datasets: [{
+                    label: 'Temperature °C',
+                    data: temps,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)'
+                    ],
+                    borderWidth: 2
+                },
+                {
+                    label: 'Humidity %',
+                    data: humidities,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(54, 162, 235, 1)'
+                    ],
+                    borderWidth: 2
+                }
+            ]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+    //console.log(hours);
+}
+
+window.setInterval("setChart()", 1800000);

@@ -51,4 +51,29 @@ class WeatherController extends Controller
         }
         return $con;
     }
+
+    public function data($name, $country){
+        $json = File::get("data/city.list.json");
+        $cities = json_decode($json);
+        $con = array();
+        foreach ($cities as $c => $value) {
+            if($value->name == $name){
+                array_push($con, $value->country);
+                foreach($con as $n){
+                    if($n == $country){
+                        if($n == $value->country){
+                            $lat = $value->coord->lat;
+                            $lon = $value->coord->lon;
+                        }
+                    }
+                }
+            }
+        }
+        $apiKey = "c7098dcf68f5bf44b6e59625d6442c4b";
+        
+        $response = file_get_contents('https://api.openweathermap.org/data/2.5/weather?lat='.$lat.'&lon='.$lon.'&exclude=daily&appid='.$apiKey);
+        $obj = json_decode($response);
+        $obj = array("temp" => $obj->main->temp, "humidity" => $obj->main->humidity);
+        return $obj;
+    }
 }

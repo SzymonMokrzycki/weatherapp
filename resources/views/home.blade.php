@@ -53,7 +53,7 @@
         </div>
     </div>
 </div>
-<div class="modal fade" onload="createChart()" tabindex="-1" id="exampleModal" role="dialog">
+<div class="modal fade" tabindex="-1" id="exampleModal" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content bg-dark text-white">
       <div class="modal-header">

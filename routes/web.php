@@ -27,3 +27,4 @@ Route::get('/allcities', [App\Http\Controllers\CityController::class, 'dispCitie
 Route::get('/deletecity/{name}/{country}', [App\Http\Controllers\CityController::class, 'delete']);
 Route::get('/list', [App\Http\Controllers\CityController::class, 'list']);
 Route::get('/add/{name}/{country}', [App\Http\Controllers\CityController::class, 'add']);
+Route::get('/dataforchart/{name}/{country}', [App\Http\Controllers\WeatherController::class, 'data']);

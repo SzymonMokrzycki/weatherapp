@@ -16,6 +16,8 @@
     },
     "dependencies": {
         "bootstrap-weather": "^1.0.0",
+        "chart.js": "^3.9.1",
+        "jquery": "^3.6.0",
         "mix": "^0.0.1"
     }
 }
