@@ -1,3 +1,9 @@
+let temps = [], humidities = [], hours = [], nam = "", cont = "";
+
+let ctx = document.getElementById('myChart').getContext('2d');
+    
+let myChart = null;
+
 function options(){
     let city = document.getElementById('form1').value;
     /*let array = input.split(",");
@@ -131,13 +137,14 @@ function allCities(){
     $.ajax({
         url: "http://localhost:8000/allcities",
         method: "GET",
+        async: false,
         success: function (data){
             $.each(data, function(i, array) {
                arr += "<tr class='bg-gradient opacity-75' id='"+i+"' onclick='selectRow("+i+"), displayWeather(\""+ array.name + "\",\""+ array.country + "\")'>"+
                "<td><i class='fas fa-city fa-lg'></i></td>"+
                "<td>"+array.name+"</td>"+
                "<td>"+array.country+"</td>"+
-               "<td></td><td><button type='button' class='btn btn-dark' data-bs-toggle='modal' data-bs-target='#exampleModal' onclick='selectRow2(\""+ array.name + "\",\""+ array.country + "\"), setC(\""+ array.name + "\",\""+ array.country + "\"), createChart()' title='Display humidity chart'><i class='fas fa-chart-line fa-xl'></i></button></td><td><button type='button' class='btn btn-dark' title='Delete' onclick='deleteRow("+i+", \""+ array.name + "\",\""+ array.country + "\")'><i class='fas fa-trash fa-xl'></i></button></td>";
+               "<td></td><td><button type='button' class='btn btn-dark' data-bs-toggle='modal' data-bs-target='#exampleModal' onclick='selectRow2(\""+ array.name + "\",\""+ array.country + "\"), setC(\""+ array.name + "\",\""+ array.country + "\"), setChart()' title='Display humidity chart'><i class='fas fa-chart-line fa-xl'></i></button></td><td><button type='button' class='btn btn-dark' title='Delete' onclick='deleteRow("+i+", \""+ array.name + "\",\""+ array.country + "\")'><i class='fas fa-trash fa-xl'></i></button></td>";
             });
             $('#tab').append(arr);
         }
@@ -199,16 +206,10 @@ function set(){
     listCities(country);
 }
 
-let temps = [], humidities = [], hours = [], nam = "", cont = "";
-
 function setC(name, country){
     nam = name;
     cont = country;
 }
-
-let ctx = document.getElementById('myChart').getContext('2d');
-    
-let myChart = null;
 
 function setChart(){
     //console.log(1);
@@ -237,7 +238,11 @@ function setChart(){
             }
         });
     }  
+    createChart();
+    //console.log(hours);
+}
 
+function createChart(){
     if(temps != [] && humidities != []){
         myChart = new Chart(ctx, {
             type: 'line',
@@ -286,7 +291,6 @@ function setChart(){
             }
         });
     }
-    //console.log(hours);
 }
 
 window.setInterval("setChart()", 1800000);
