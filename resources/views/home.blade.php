@@ -53,7 +53,7 @@
         </div>
     </div>
 </div>
-<div class="modal fade" tabindex="-1" id="exampleModal" role="dialog">
+<div class="modal fade modal-xl" tabindex="-1" id="exampleModal" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content bg-dark text-white">
       <div class="modal-header">
@@ -63,7 +63,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <canvas id="myChart" width="500" height="500"></canvas>
+        <canvas id="myChart" height="100"></canvas>
       </div>
       <div class="modal-footer">
       </div>

@@ -76,6 +76,20 @@ function selectRow1(id, name, country){
 }
 
 function selectRow2(name, country){
+    ctx.clearRect(0,0, ctx.width, ctx.height);
+    if(myChart != null){
+        myChart.destroy();
+    }
+    if(nam != name || cont != country){
+        temps = [];
+        humidities = [];
+        hours = [];
+        temps[0] = null;
+        humidities[0] = null;
+        hours[0] = null;
+        //console.log(1);
+    }
+    //console.log(nam+" "+name+" "+temps[0]);
     const date = new Date();
 
     let day = date.getDate();
@@ -93,6 +107,34 @@ function selectRow2(name, country){
         currentDate = `0${day}.0${month}.${year}`;
     }
     $("#titlechart").html(""+name+", "+country+" - "+currentDate);
+
+    const today = new Date();
+    let min = today.getMinutes();
+    let minutes = "";
+    if(min < 10){
+        minutes = "0"+min;
+    }else{
+        minutes = ""+min;
+    }
+    let time = today.getHours() + ":" + minutes;
+    if(temps[0] == null && humidities[0] == null && hours[0] == null){
+        $.ajax({
+            url: "http://localhost:8000/dataforchart/"+name+"/"+country,
+            method: "GET",
+            async: false,
+            success: function (data){
+                let t = data.temp-273.15;
+                temps[0] = t.toFixed(2);
+                humidities[0] = data.humidity;
+                hours[0] = time;
+                //console.log(t);
+            }
+        });
+    }  
+    createChart();
+    nam = name;
+    cont = country;
+    //console.log(hours);
 }
 
 function displayWeather(name, country){
@@ -144,7 +186,7 @@ function allCities(){
                "<td><i class='fas fa-city fa-lg'></i></td>"+
                "<td>"+array.name+"</td>"+
                "<td>"+array.country+"</td>"+
-               "<td></td><td><button type='button' class='btn btn-dark' data-bs-toggle='modal' data-bs-target='#exampleModal' onclick='selectRow2(\""+ array.name + "\",\""+ array.country + "\"), setC(\""+ array.name + "\",\""+ array.country + "\"), setChart()' title='Display humidity chart'><i class='fas fa-chart-line fa-xl'></i></button></td><td><button type='button' class='btn btn-dark' title='Delete' onclick='deleteRow("+i+", \""+ array.name + "\",\""+ array.country + "\")'><i class='fas fa-trash fa-xl'></i></button></td>";
+               "<td></td><td><button type='button' class='btn btn-dark' data-bs-toggle='modal' data-bs-target='#exampleModal' onclick='selectRow2(\""+ array.name + "\",\""+ array.country + "\")' title='Display humidity chart'><i class='fas fa-chart-line fa-xl'></i></button></td><td><button type='button' class='btn btn-dark' title='Delete' onclick='deleteRow("+i+", \""+ array.name + "\",\""+ array.country + "\")'><i class='fas fa-trash fa-xl'></i></button></td>";
             });
             $('#tab').append(arr);
         }
@@ -170,13 +212,26 @@ function listCities(cont){
 }
 
 function addCity(name, country){
+    let len = 0;
     $.ajax({
-        url: "http://localhost:8000/add/"+name+"/"+country,
+        url: "http://localhost:8000/allcities",
         method: "GET",
-        success: function (){
+        async: false,
+        success: function (data){
+            len = data.length;
         }
     });
-    window.location.reload(true);
+    if(len < 10){
+        $.ajax({
+            url: "http://localhost:8000/add/"+name+"/"+country,
+            method: "GET",
+            success: function (){
+            }
+        });
+        window.location.reload(true);
+    }else{
+        alert("You can save only 10 cities.");
+    }
 }
 
 function searchFunction() {
@@ -206,11 +261,6 @@ function set(){
     listCities(country);
 }
 
-function setC(name, country){
-    nam = name;
-    cont = country;
-}
-
 function setChart(){
     //console.log(1);
     ctx.clearRect(0,0, ctx.width, ctx.height);
@@ -230,6 +280,7 @@ function setChart(){
         $.ajax({
             url: "http://localhost:8000/dataforchart/"+nam+"/"+cont,
             method: "GET",
+            async: false,
             success: function (data){
                 let t = data.temp-273.15;
                 temps.push(t.toFixed(2));
@@ -292,5 +343,5 @@ function createChart(){
         });
     }
 }
-
-window.setInterval("setChart()", 1800000);
+let timer = 60000;
+window.setInterval("setChart()", timer*30);
