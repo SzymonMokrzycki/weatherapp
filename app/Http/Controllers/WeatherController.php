@@ -8,6 +8,11 @@ use File;
 class WeatherController extends Controller
 {
     public function index($name, $country){
+        /*
+        Funkcja pobiera wpółrzędne miasta z pliku json,
+        łączy się z api pogodowym i dla tego miasta zwraca wszystkie
+        dane pogodowe. 
+        */
         $json = File::get("data/city.list.json");
         $cities = json_decode($json);
         $con = array();
@@ -41,6 +46,10 @@ class WeatherController extends Controller
     }
 
     public function index1($name){
+        /*
+        Funkcja pobiera dane z pliku json i 
+        zwraca dla podanej nazwy miasta kody krajów w których ono występuje.
+        */
         $json = File::get("data/city.list.json");
         $cities = json_decode($json);
         $con = array();
@@ -53,6 +62,11 @@ class WeatherController extends Controller
     }
 
     public function data($name, $country){
+        /*
+        Funkcja pobiera współrzędne miasta z pliku json
+        a następnie łączy sie z api pogodowym i pobiera dane wilgotności
+        i temperatury aktualnej oraz zwraca je.
+        */
         $json = File::get("data/city.list.json");
         $cities = json_decode($json);
         $con = array();

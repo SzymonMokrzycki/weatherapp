@@ -5,11 +5,12 @@ let ctx = document.getElementById('myChart').getContext('2d');
 let myChart = null;
 
 function options(){
+    /*
+    Funkcja pobiera nazwy miast wraz kodami krajów z pliku json i 
+    dołącza do listy rozwijanej obok pola wyszukiwarki kraje powiązane 
+    z wpisaną nazwą miasta.
+    */
     let city = document.getElementById('form1').value;
-    /*let array = input.split(",");
-    let city = array[0];
-    let country = array[1];
-    console.log(v);*/
     let option = "";
     if(city != ""){
         $.ajax({
@@ -31,7 +32,10 @@ function options(){
 }
 
 function fun(){
-    //console.log("cos");
+    /*
+    Funkcja po załadowaniu strony wyswietla dane pogodowe z api 
+    na widgecie domyślnego miasta Warsaw, PL.
+    */
     let city = document.getElementById('form1').value;
     let country = document.getElementById('place').value;
     let weather = "", temp = "", humidity = "", wind = "", array = [];
@@ -63,19 +67,29 @@ function fun(){
 }
 
 function selectRow(id){
+    /*
+    Funkcja obsługuje mechanizm podświetlenia wybranego miasta z listy obserwowanych.
+    */
     $("#"+id).addClass('opacity-100 bg-secondary selected').siblings().removeClass('opacity-100 bg-secondary selected');
-    //console.log(selected);
 }
 
 function selectRow1(id, name, country){
+    /*
+    Funkcja odpowiadająca za wybór miasta z pęłnej listy miast,
+    które ma być zapisane jako obserwowane.
+    */
     $("#"+id).addClass('opacity-100 bg-secondary selected').siblings().removeClass('opacity-100 bg-secondary selected');
     $("#addcity").on('click', function(e){
         addCity(name, country);
     });
-    //console.log(selected);
 }
 
 function selectRow2(name, country){
+    /*
+    Funkcja odpowiada za pobranie pierwszych danych i narysowanie wykresu 
+    wilgotności i temperatury po kliknięciu w przycisk wykresu.
+    Z każdym kliknięciem na inne miasto rysuje nowy wykres dla nowych danych.
+    */
     ctx.clearRect(0,0, ctx.width, ctx.height);
     if(myChart != null){
         myChart.destroy();
@@ -87,9 +101,9 @@ function selectRow2(name, country){
         temps[0] = null;
         humidities[0] = null;
         hours[0] = null;
-        //console.log(1);
+        
     }
-    //console.log(nam+" "+name+" "+temps[0]);
+
     const date = new Date();
 
     let day = date.getDate();
@@ -127,17 +141,19 @@ function selectRow2(name, country){
                 temps[0] = t.toFixed(2);
                 humidities[0] = data.humidity;
                 hours[0] = time;
-                //console.log(t);
             }
         });
     }  
     createChart();
     nam = name;
     cont = country;
-    //console.log(hours);
 }
 
 function displayWeather(name, country){
+    /*
+    Funkcja pobiera i wyświetla dane pogody na widgecie 
+    dla wybranego miasta z listy obserwowanych.
+    */
     let weather = "", temp = "", humidity = "", wind = "", array = [];
     $.ajax({
         url: "http://localhost:8000/city/"+name+"/"+country,
@@ -164,6 +180,9 @@ function displayWeather(name, country){
 }
 
 function deleteRow(id, name, country){
+    /*
+    Funkcja obsługuje dynamiczne usuwanie miast.
+    */
     $.ajax({
         url: "http://localhost:8000/deletecity/"+name+"/"+country,
         method: "GET",
@@ -176,6 +195,9 @@ function deleteRow(id, name, country){
 
 let arr = "", arr1 = "", i = 0;
 function allCities(){
+    /*
+    Funkcja pobiera i wyświetla liste obserwowanych miast z bazy danych.
+    */
     $.ajax({
         url: "http://localhost:8000/allcities",
         method: "GET",
@@ -194,6 +216,10 @@ function allCities(){
 }
 
 function listCities(cont){
+    /*
+    Funkcja odpowiada za wyświetlenie listy miast z pliku json 
+    do wyboru miasta do zapisania w bazie.
+    */
     $.ajax({
         url: "http://localhost:8000/list",
         method: "GET",
@@ -212,6 +238,9 @@ function listCities(cont){
 }
 
 function addCity(name, country){
+    /*
+    Funkcja dodaje wybrane miasto z listy do bazy.
+    */
     let len = 0;
     $.ajax({
         url: "http://localhost:8000/allcities",
@@ -235,6 +264,9 @@ function addCity(name, country){
 }
 
 function searchFunction() {
+    /*
+    Funkcja filtruje liste miast po kątem wpisanej frazy.
+    */
     var searchInput = document.getElementById("filter");
     var filter = searchInput.value.toUpperCase();
     var tableRow = document.getElementsByName("listadd");
@@ -257,12 +289,20 @@ function searchFunction() {
 
 
 function set(){
+    /*
+    Funkcja pobiera wpisany kod kraju w którym użytkownik będzie szukał miasta
+    i na tej podstawie tworzy listę miast.
+    */
     let country = document.getElementById('contry').value;
     listCities(country);
 }
 
 function setChart(){
-    //console.log(1);
+    /*
+    Funkcja w odstepie 30 min. łączy się api pogodowym i pobiera dane 
+    wilgotności i temperatury dla danego miasta pokazania na wykresie 
+    po czym rysuje je na wykresie.
+    */
     ctx.clearRect(0,0, ctx.width, ctx.height);
     if(myChart != null){
         myChart.destroy();
@@ -290,10 +330,12 @@ function setChart(){
         });
     }  
     createChart();
-    //console.log(hours);
 }
 
 function createChart(){
+    /*
+    Funkcja rysuje wykres jeśli istnieją dane wiglotności i temperatury.
+    */
     if(temps != [] && humidities != []){
         myChart = new Chart(ctx, {
             type: 'line',
