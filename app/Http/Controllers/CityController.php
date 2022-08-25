@@ -14,7 +14,14 @@ class CityController extends Controller
         Funkcja pobiera dane zapisanych miast z bazy i zwraca je.
         */
         $allCities = City::all();
-        return $allCities;
+        $id = Auth::user()->id;
+        $cities = [];
+        foreach($allCities as $c){
+            if($id == $c->user_id){
+                array_push($cities, $c);
+            }
+        }
+        return $cities;
     }
 
     public function delete($name, $country){
